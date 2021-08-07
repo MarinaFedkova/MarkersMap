@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MarkersMap</string>
+    <string name="permission_requied">Для правильной работы приложения требуется разрешение</string>
+    <string name="permission_no">Мы не можем показать это без вашего разрешения</string>
+    <string name="title">Введите название</string>
+    <string name="edit_title">Введите название</string>
+    <string name="save">сохранить</string>
+    <string name="move">перейти</string>
+    <string name="menu_edit">изменить</string>
+    <string name="menu_delete">удалить</string>
+</resources>

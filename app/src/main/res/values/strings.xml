@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MarkersMap</string>
+    <string name="permission_requied">Permission is required for the correct operation of the application</string>
+    <string name="permission_no">We can\'t show this without your permission</string>
+    <string name="title">Enter title</string>
+    <string name="edit_title">Edit title</string>
+    <string name="save">save</string>
+    <string name="move">move</string>
+    <string name="menu_edit">edit</string>
+    <string name="menu_delete">delete</string>
+</resources>
