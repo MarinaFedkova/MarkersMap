@@ -44,11 +44,9 @@ class MarkersListFragment : Fragment() {
         })
 
         binding.markersList.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner, { state ->
-            adapter.submitList(state.markers)
+        viewModel.data.observe(viewLifecycleOwner, { markers ->
+            adapter.submitList(markers)
         })
-
-
 
         return binding.root
     }

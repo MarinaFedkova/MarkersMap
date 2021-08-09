@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import ru.maggy.markersmap.dto.Marker
 
 interface MarkerRepository {
-    val data: LiveData<List<Marker>>
 
-    suspend fun getAll()
+    fun getAll(): LiveData<List<Marker>>
     suspend fun save(marker: Marker)
     suspend fun deleteById(id: Int)
 }

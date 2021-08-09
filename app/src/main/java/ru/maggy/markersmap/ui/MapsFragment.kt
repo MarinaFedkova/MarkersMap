@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.collections.MarkerManager
@@ -104,41 +105,25 @@ class MapsFragment : Fragment() {
                 }
             }
 
-
-     /*       viewModel.data.observe(viewLifecycleOwner, { state ->
-                val markerManager = MarkerManager(googleMap)
-
-                val collection: MarkerManager.Collection = markerManager.newCollection().apply {
-                    state.markers.forEach { marker ->
-                        addMarker {
-                            position(marker.position)
-                            icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                            title(marker.title)
-                        }
-                    }
-                }
-            })*/
             val markerManager = MarkerManager(googleMap)
 
-            val collection: MarkerManager.Collection = markerManager.newCollection()
-                    addMarker {
-                        position(marker.position)
-                        icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                        title(marker.title)
+            mapsFragment.getMapAsync(OnMapReadyCallback {
+                it.setOnMapLongClickListener {
+                    val collection: MarkerManager.Collection = markerManager.newCollection().apply {
+                        val newMarker = addMarker {
+                            position(it)
+                            icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
+                            title("")
+                        }
+                        findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment,
+                            Bundle().apply
+                            { textArg = newMarker.title })
                     }
 
-
-
-                googleMap.setOnMapLongClickListener {
-                    val marker = collection.addMarker {
-                        position(it)
-                        icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                        title("")
-                    }
-                    findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment,
-                        Bundle().apply
-                        { textArg = marker.title })
                 }
+
+            })
+
 
             val target = LatLng(55.751999, 37.617734)
             googleMap.awaitAnimateCamera(
@@ -152,13 +137,17 @@ class MapsFragment : Fragment() {
     }
 }
 
-private fun addMarker(collection: MarkerManager.Collection, position: LatLng) {
-    collection.addMarker {
-        position(position)
-        icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-        title(title)
-    }
+/*       viewModel.data.observe(viewLifecycleOwner, { state ->
+                val markerManager = MarkerManager(googleMap)
 
-}
-
+                val collection: MarkerManager.Collection = markerManager.newCollection().apply {
+                    state.markers.forEach { marker ->
+                        addMarker {
+                            position(marker.position)
+                            icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
+                            title(marker.title)
+                        }
+                    }
+                }
+            })*/
 
