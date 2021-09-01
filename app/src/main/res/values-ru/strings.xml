@@ -9,4 +9,7 @@
     <string name="move">перейти</string>
     <string name="menu_edit">изменить</string>
     <string name="menu_delete">удалить</string>
+    <string name="menu_cancel">отменить</string>
+    <string name="menu_marker">Изменить или удалить маркер?</string>
+    <string name="list_markers">Список маркеров</string>
 </resources>

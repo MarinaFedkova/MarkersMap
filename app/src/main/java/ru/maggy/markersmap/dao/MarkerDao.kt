@@ -16,5 +16,5 @@ interface MarkerDao {
     suspend fun insert(marker: MarkerEntity)
 
     @Query("DELETE FROM MarkerEntity WHERE id = :id")
-    fun deleteById(id: Int)
+    suspend fun deleteById(id: Int)
 }

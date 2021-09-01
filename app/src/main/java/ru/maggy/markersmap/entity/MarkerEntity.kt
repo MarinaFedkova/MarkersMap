@@ -35,3 +35,4 @@ data class MarkerEntity(
 
 
 fun List<MarkerEntity>.toDto(): List<Marker> = map(MarkerEntity::toDto)
+fun List<Marker>.toEntity(): List<MarkerEntity> = map(MarkerEntity::fromDto)

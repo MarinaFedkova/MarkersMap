@@ -17,16 +17,13 @@ import ru.maggy.markersmap.viewmodel.MarkerViewModel
 
 class MarkersListFragment : Fragment() {
 
-    private val viewModel: MarkerViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentMarkersListBinding.inflate(inflater, container, false)
 
+        val viewModel: MarkerViewModel by viewModels()
         val adapter = MarkersAdapter(object : OnInterfactionListener {
 
             override fun onDelete(marker: Marker) {
@@ -47,6 +44,8 @@ class MarkersListFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner, { markers ->
             adapter.submitList(markers)
         })
+
+
 
         return binding.root
     }

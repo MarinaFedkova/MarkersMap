@@ -5,14 +5,13 @@ import androidx.lifecycle.map
 import ru.maggy.markersmap.dao.MarkerDao
 import ru.maggy.markersmap.dto.Marker
 import ru.maggy.markersmap.entity.MarkerEntity
+import ru.maggy.markersmap.entity.toDto
 
 class MarkerRepositoryImpl(
     private val dao: MarkerDao
 ): MarkerRepository {
 
-    override fun getAll(): LiveData<List<Marker>> = dao.getAll().map {
-                it.map(MarkerEntity::toDto)
-            }
+    override val data = dao.getAll().map(List<MarkerEntity>::toDto)
 
     override suspend fun save(marker: Marker) {
         try {

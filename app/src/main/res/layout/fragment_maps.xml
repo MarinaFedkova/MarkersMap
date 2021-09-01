@@ -13,4 +13,14 @@
        android:layout_height="match_parent"
        />
 
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+       android:id="@+id/list_markers"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:clickable="true"
+       android:layout_gravity="bottom|center"
+       android:layout_margin="@dimen/margin"
+       android:src="@drawable/ic_list_alt_72"
+       android:focusable="true"
+       android:contentDescription="@string/list_markers" />
 </FrameLayout>

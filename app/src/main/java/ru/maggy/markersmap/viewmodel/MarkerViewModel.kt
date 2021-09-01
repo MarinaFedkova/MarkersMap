@@ -15,21 +15,9 @@ class MarkerViewModel(application: Application) : AndroidViewModel(application) 
     private val repository: MarkerRepository =
         MarkerRepositoryImpl(AppDb.getInstance(application).markerDao())
 
-    val data = repository.getAll()
+    val data = repository.data
 
     val edited = MutableLiveData(emptyMarker)
-
-    init {
-        loadMarkers()
-    }
-
-    fun loadMarkers() = viewModelScope.launch {
-        try {
-            repository.getAll()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     fun saveMarker() {
         edited.value?.let {

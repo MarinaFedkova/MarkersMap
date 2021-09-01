@@ -26,16 +26,21 @@ abstract class AppDb: RoomDatabase() {
                 .build()
     }
 }
-
 class Converters {
     @TypeConverter
-    fun fromLatLng(value: List<Double>): LatLng {
-        return  value.let {
-            LatLng (value[0], value[1]) }
+    fun fromLatLngToString(value: LatLng): String {
+        val list = value.let { listOf(it.latitude.toString(), it.longitude.toString()) }
+        return list.joinToString(",")
     }
 
     @TypeConverter
-    fun dateToLatLng(position: LatLng): List<Double> {
-        return position.let { listOf(it.latitude, it.longitude) }
+    fun fromStringToLatLng(value: String): LatLng {
+        val list = value.split(",")
+        return list.let {
+            LatLng(value[0].code.toDouble(), value[1].code.toDouble())
+        }
     }
+
+
 }
+
