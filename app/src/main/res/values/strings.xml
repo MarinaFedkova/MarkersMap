@@ -8,4 +8,7 @@
     <string name="move">move</string>
     <string name="menu_edit">edit</string>
     <string name="menu_delete">delete</string>
+    <string name="menu_cancel">cancel</string>
+    <string name="menu_marker">Edit or delete marker?</string>
+    <string name="list_markers">list markers</string>
 </resources>
