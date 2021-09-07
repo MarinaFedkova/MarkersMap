@@ -37,7 +37,7 @@ class Converters {
     fun fromStringToLatLng(value: String): LatLng {
         val list = value.split(",")
         return list.let {
-            LatLng(value[0].code.toDouble(), value[1].code.toDouble())
+            LatLng(it[0].toDouble(), it[1].toDouble())
         }
     }
 

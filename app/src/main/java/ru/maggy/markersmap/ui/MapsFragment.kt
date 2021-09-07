@@ -26,6 +26,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.collections.MarkerManager
+import com.google.maps.android.ktx.addMarker
 import com.google.maps.android.ktx.awaitAnimateCamera
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ktx.model.cameraPosition
@@ -39,6 +40,10 @@ import ru.maggy.markersmap.viewmodel.MarkerViewModel
 
 class MapsFragment : Fragment() {
     private lateinit var googleMap: GoogleMap
+
+    private val viewModel: MarkerViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher =
@@ -69,7 +74,7 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val mapsFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        val viewModel: MarkerViewModel by viewModels()
+
         val listMarkers = view.findViewById<View>(R.id.list_markers)
 
         lifecycle.coroutineScope.launchWhenCreated {
@@ -114,8 +119,6 @@ class MapsFragment : Fragment() {
             }
             val markerManager = MarkerManager(googleMap)
 
-            val viewModel: MarkerViewModel by viewModels()
-
             val collection: MarkerManager.Collection = markerManager.newCollection()
             viewModel.data.observe(viewLifecycleOwner) {
                 it.forEach {
@@ -128,15 +131,24 @@ class MapsFragment : Fragment() {
                     }
                 }
             }
-
             googleMap.setOnMapLongClickListener {
-                collection.addMarker {
-                    position(it)
-                    icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                    title("")
-                }
+                MarkerOptions()
+                    .position(it)
+                    .title("")
+                    .icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
+                viewModel.changePosition(it)
                 findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment)
             }
+
+
+               /*googleMap.setOnMapLongClickListener {
+                   collection.addMarker {
+                       position(it)
+                       icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
+                       title("")
+                   }
+                   findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment)
+               }*/
 
             collection.setOnMarkerClickListener { marker ->
                 val builder = AlertDialog.Builder(requireContext())
@@ -171,7 +183,6 @@ class MapsFragment : Fragment() {
         }
     }
 }
-
 
 
 /*       viewModel.data.observe(viewLifecycleOwner) {

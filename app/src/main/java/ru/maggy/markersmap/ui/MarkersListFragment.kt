@@ -16,6 +16,9 @@ import ru.maggy.markersmap.ui.EditMarkerFragment.Companion.textArg
 import ru.maggy.markersmap.viewmodel.MarkerViewModel
 
 class MarkersListFragment : Fragment() {
+    private val viewModel: MarkerViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,7 +26,6 @@ class MarkersListFragment : Fragment() {
     ): View {
         val binding = FragmentMarkersListBinding.inflate(inflater, container, false)
 
-        val viewModel: MarkerViewModel by viewModels()
         val adapter = MarkersAdapter(object : OnInterfactionListener {
 
             override fun onDelete(marker: Marker) {
@@ -31,12 +33,12 @@ class MarkersListFragment : Fragment() {
             }
 
             override fun onEdit(marker: Marker) {
+                viewModel.edit(marker)
                 findNavController().navigate(R.id.action_markersListFragment_to_editMarkerFragment,
-                Bundle().apply
-                 {
-                     textArg = marker.title
-                     viewModel.edit(marker)
-                 })
+                    Bundle().apply
+                    {
+                        textArg = marker.title
+                    })
             }
         })
 
@@ -45,6 +47,11 @@ class MarkersListFragment : Fragment() {
             adapter.submitList(markers)
         })
 
+   /*     viewModel.edited.observe(viewLifecycleOwner, { marker ->
+            if (marker.id == 0) {
+                return@observe
+            }
+        })*/
 
 
         return binding.root
