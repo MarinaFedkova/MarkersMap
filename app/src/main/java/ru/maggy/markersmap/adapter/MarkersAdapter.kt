@@ -17,6 +17,7 @@ import ru.maggy.markersmap.ui.EditMarkerFragment.Companion.textArg
 interface OnInterfactionListener {
     fun onDelete(marker: Marker) {}
     fun onEdit(marker: Marker) {}
+    fun moveToMarker(marker: Marker) {}
 }
 
 class MarkersAdapter(
@@ -65,7 +66,7 @@ class MarkersAdapter(
                     }.show()
                 }
                 binding.move.setOnClickListener {
-                    //TODO move to map
+                    onInterfactionListener.moveToMarker(marker)
                 }
             }
         }

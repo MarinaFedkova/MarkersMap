@@ -7,18 +7,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.model.LatLng
 import ru.maggy.markersmap.R
 import ru.maggy.markersmap.adapter.MarkersAdapter
 import ru.maggy.markersmap.adapter.OnInterfactionListener
 import ru.maggy.markersmap.databinding.FragmentMarkersListBinding
 import ru.maggy.markersmap.dto.Marker
 import ru.maggy.markersmap.ui.EditMarkerFragment.Companion.textArg
+import ru.maggy.markersmap.util.PositionArg
 import ru.maggy.markersmap.viewmodel.MarkerViewModel
 
 class MarkersListFragment : Fragment() {
     private val viewModel: MarkerViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+
+    companion object {
+        var Bundle.positionData: LatLng? by PositionArg
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +45,13 @@ class MarkersListFragment : Fragment() {
                     {
                         textArg = marker.title
                     })
+            }
+
+            override fun moveToMarker(marker: Marker) {
+                findNavController().navigate(R.id.action_markersListFragment_to_mapsFragment,
+                Bundle().apply {
+                     positionData = marker.position
+                 })
             }
         })
 

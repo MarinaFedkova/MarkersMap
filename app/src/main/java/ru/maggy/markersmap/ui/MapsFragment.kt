@@ -35,6 +35,8 @@ import ru.maggy.markersmap.R
 import ru.maggy.markersmap.adapter.MarkersAdapter
 import ru.maggy.markersmap.extensions.icon
 import ru.maggy.markersmap.ui.EditMarkerFragment.Companion.textArg
+import ru.maggy.markersmap.ui.MarkersListFragment.Companion.positionData
+import ru.maggy.markersmap.util.PositionArg
 import ru.maggy.markersmap.viewmodel.MarkerViewModel
 
 
@@ -44,6 +46,10 @@ class MapsFragment : Fragment() {
     private val viewModel: MarkerViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+
+    companion object {
+        var Bundle.positionData: LatLng? by PositionArg
+    }
 
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher =
@@ -173,10 +179,15 @@ class MapsFragment : Fragment() {
             }
 
             val target = LatLng(55.751999, 37.617734)
+            val userTarget = arguments?.positionData
             googleMap.awaitAnimateCamera(
                 CameraUpdateFactory.newCameraPosition(
                     cameraPosition {
-                        target(target)
+                        if (userTarget != null) {
+                            target(userTarget)
+                        } else {
+                            target(target)
+                        }
                         zoom(15F)
                     }
                 ))
@@ -185,47 +196,6 @@ class MapsFragment : Fragment() {
 }
 
 
-/*       viewModel.data.observe(viewLifecycleOwner) {
 
-            val markerManager = MarkerManager(googleMap)
-            val collection: MarkerManager.Collection = markerManager.newCollection().apply {
-                it.forEach { marker ->
-                    addMarker {
-                        position(marker.position)
-                        icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                        title(marker.title)
-                    }
-                }
-            }
-
-            collection.setOnInfoWindowLongClickListener { marker ->
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setMessage(R.string.menu_marker)
-                builder.setPositiveButton(R.string.menu_edit) { dialog, _ ->
-                    findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment,
-                        Bundle().apply
-                        { textArg = marker.title })
-                }
-                builder.setNegativeButton(R.string.menu_delete) { dialog, _ ->
-                    marker.remove()
-                    viewModel.deleteMarker(id)
-                    marker.showInfoWindow()
-                }
-                builder.setNeutralButton(R.string.menu_cancel) { dialog, _ ->
-                    marker.showInfoWindow()
-                    dialog.cancel()
-                }
-                val dialog: AlertDialog = builder.create()
-                dialog.show()
-            }
-            googleMap.setOnMapLongClickListener {
-                collection.addMarker {
-                    position(it)
-                    icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                    title("")
-                }
-                findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment)
-            }
-        }*/
 
 
