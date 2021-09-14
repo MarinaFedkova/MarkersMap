@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,8 +32,10 @@ import com.google.maps.android.ktx.awaitAnimateCamera
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ktx.model.cameraPosition
 import com.google.maps.android.ktx.utils.collection.addMarker
+import kotlinx.coroutines.launch
 import ru.maggy.markersmap.R
 import ru.maggy.markersmap.adapter.MarkersAdapter
+import ru.maggy.markersmap.dto.Marker
 import ru.maggy.markersmap.extensions.icon
 import ru.maggy.markersmap.ui.EditMarkerFragment.Companion.textArg
 import ru.maggy.markersmap.ui.MarkersListFragment.Companion.positionData
@@ -146,16 +149,6 @@ class MapsFragment : Fragment() {
                 findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment)
             }
 
-
-               /*googleMap.setOnMapLongClickListener {
-                   collection.addMarker {
-                       position(it)
-                       icon(getDrawable(requireContext(), R.drawable.ic_place_48)!!)
-                       title("")
-                   }
-                   findNavController().navigate(R.id.action_mapsFragment_to_editMarkerFragment)
-               }*/
-
             collection.setOnMarkerClickListener { marker ->
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setMessage(R.string.menu_marker)
@@ -165,8 +158,8 @@ class MapsFragment : Fragment() {
                         { textArg = marker.title })
                 }
                 builder.setNegativeButton(R.string.menu_delete) { dialog, _ ->
+                    viewModel.deleteMarker((marker.tag as Marker).id)
                     marker.remove()
-                    viewModel.deleteMarker(id)
                     marker.showInfoWindow()
                 }
                 builder.setNeutralButton(R.string.menu_cancel) { dialog, _ ->
@@ -180,14 +173,23 @@ class MapsFragment : Fragment() {
 
             val target = LatLng(55.751999, 37.617734)
             val userTarget = arguments?.positionData
+
+            viewModel.selectMarker.observe(viewLifecycleOwner) {
+                lifecycleScope.launch {
+                    googleMap.awaitAnimateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            cameraPosition {
+                                target(it.position)
+                                zoom(15F)
+                            }
+                        ))
+                }
+            }
+
             googleMap.awaitAnimateCamera(
                 CameraUpdateFactory.newCameraPosition(
                     cameraPosition {
-                        if (userTarget != null) {
-                            target(userTarget)
-                        } else {
-                            target(target)
-                        }
+                        target(target)
                         zoom(15F)
                     }
                 ))

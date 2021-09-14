@@ -8,6 +8,7 @@ import ru.maggy.markersmap.db.AppDb
 import ru.maggy.markersmap.dto.Marker
 import ru.maggy.markersmap.repository.MarkerRepository
 import ru.maggy.markersmap.repository.MarkerRepositoryImpl
+import ru.maggy.markersmap.util.SingleLiveEvent
 
 private var emptyMarker = Marker(0, "", LatLng(0.0, 0.0))
 
@@ -19,8 +20,15 @@ class MarkerViewModel(application: Application) : AndroidViewModel(application) 
 
     val edited = MutableLiveData(emptyMarker)
 
-    fun saveMarker() {
+    private val _selectMarker = SingleLiveEvent<Marker>()
+    val selectMarker: LiveData<Marker>
+    get() = _selectMarker
 
+    fun selectMarker(marker: Marker) {
+        _selectMarker.value = marker
+    }
+
+    fun saveMarker() {
         edited.value?.let {
             viewModelScope.launch {
                 try {
@@ -61,7 +69,7 @@ class MarkerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun changePosition(position: LatLng) {
-        emptyMarker = emptyMarker.copy(position = position)
+        edited.value = edited.value?.copy(position = position)
     }
 
 }

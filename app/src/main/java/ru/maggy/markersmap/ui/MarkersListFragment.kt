@@ -48,11 +48,17 @@ class MarkersListFragment : Fragment() {
             }
 
             override fun moveToMarker(marker: Marker) {
+                viewModel.selectMarker(marker)
+                findNavController().navigateUp()
+            }
+        /*    override fun moveToMarker(marker: Marker) {
+                viewModel.edit(marker)
                 findNavController().navigate(R.id.action_markersListFragment_to_mapsFragment,
                 Bundle().apply {
                      positionData = marker.position
                  })
-            }
+            }*/
+
         })
 
         binding.markersList.adapter = adapter
