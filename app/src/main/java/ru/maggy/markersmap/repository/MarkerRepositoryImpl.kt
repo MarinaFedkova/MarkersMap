@@ -1,5 +1,7 @@
 package ru.maggy.markersmap.repository
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import ru.maggy.markersmap.dao.MarkerDao
 import ru.maggy.markersmap.dto.Marker
@@ -12,21 +14,12 @@ class MarkerRepositoryImpl(
 
     override val data = dao.getAll().map(List<MarkerEntity>::toDto)
 
-    override suspend fun getAll() {
-        try {
-            dao.getAll()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
     override suspend fun save(marker: Marker) {
-        try {
-            dao.insert(MarkerEntity.fromDto(marker))
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+            try {
+                dao.save(MarkerEntity.fromDto(marker))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
     }
 
     override suspend fun deleteById(id: Int) {

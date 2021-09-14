@@ -17,7 +17,7 @@ class EditMarkerFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: MarkerViewModel by viewModels(
+     private val viewModel: MarkerViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
 
@@ -25,6 +25,8 @@ class EditMarkerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
         val binding = FragmentEditMarkerBinding.inflate(inflater, container, false)
 
         binding.editTitle.requestFocus()

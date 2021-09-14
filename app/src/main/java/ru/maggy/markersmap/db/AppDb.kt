@@ -1,14 +1,13 @@
 package ru.maggy.markersmap.db
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.google.android.gms.maps.model.LatLng
 import ru.maggy.markersmap.dao.MarkerDao
 import ru.maggy.markersmap.entity.MarkerEntity
 
 @Database(entities = [MarkerEntity::class], version = 1, exportSchema = false)
-
+@TypeConverters(Converters::class)
 abstract class AppDb: RoomDatabase() {
     abstract fun markerDao(): MarkerDao
 
@@ -27,3 +26,21 @@ abstract class AppDb: RoomDatabase() {
                 .build()
     }
 }
+class Converters {
+    @TypeConverter
+    fun fromLatLngToString(value: LatLng): String {
+        val list = value.let { listOf(it.latitude.toString(), it.longitude.toString()) }
+        return list.joinToString(",")
+    }
+
+    @TypeConverter
+    fun fromStringToLatLng(value: String): LatLng {
+        val list = value.split(",")
+        return list.let {
+            LatLng(it[0].toDouble(), it[1].toDouble())
+        }
+    }
+
+
+}
+
